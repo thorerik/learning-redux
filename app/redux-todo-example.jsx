@@ -1,6 +1,6 @@
 var redux = require('redux');
 
-console.log('Starting redux example');
+cl('Starting redux example');
 
 var stateDefaults = {
   searchText: '',
@@ -8,9 +8,27 @@ var stateDefaults = {
   todos: []
 };
 var reducer = (state = stateDefaults, action) => {
-  return state;
+  switch(action.type) {
+    case 'CHANGE_SEARCH_TEXT':
+      return {
+        ...state,
+        searchText: action.searchText
+      };
+    default:
+      return state;
+  }
 };
 var store = redux.createStore(reducer);
 
-var currentState = store.getState();
-console.log(currentState);
+cl(store.getState(), 'state');
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'Mrow'
+});
+
+cl(store.getState(), 'state');
+
+function cl(data, prefix = 'app') {
+  console.log(`[${prefix}]`, data);
+}
