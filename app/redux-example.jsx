@@ -1,6 +1,6 @@
 var redux = require('redux');
 
-console.log('[app]', 'Starting redux example');
+cl('Starting redux example');
 
 var reducer = (state = {name: 'Anonymous'}, action) => {
   switch(action.type) {
@@ -14,13 +14,28 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
       return state;
   }
 };
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
 
-console.log('[state]', store.getState());
+var unsubscribe = store.subscribe(() => {
+  var state = store.getState();
+  cl(state, 'state');
+  document.getElementById('app').innerHTML = state.name;
+});
 
 store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Mrow'
 });
 
-console.log('[state]', store.getState());
+store.dispatch({
+  type: 'CHANGE_NAME',
+  name: 'Meow'
+});
+
+//unsubscribe();
+
+function cl(data, prefix = 'app') {
+  console.log(`[${prefix}]`, data);
+}

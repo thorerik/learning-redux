@@ -18,16 +18,27 @@ var reducer = (state = stateDefaults, action) => {
       return state;
   }
 };
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
 
-cl(store.getState(), 'state');
+// Subscribe to changes
+var unsubscribe = store.subscribe(() => {
+  var state = store.getState();
+  cl(state, 'state');
+});
 
 store.dispatch({
   type: 'CHANGE_SEARCH_TEXT',
   searchText: 'Mrow'
 });
 
-cl(store.getState(), 'state');
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'Woof'
+});
+
+unsubscribe();
 
 function cl(data, prefix = 'app') {
   console.log(`[${prefix}]`, data);
