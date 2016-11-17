@@ -45,6 +45,11 @@ module.exports = {
     alias: {
       applicationStyles: 'app/styles/app.scss',
     },
+    modulesDirectories: [
+      'node_modules',
+      './app/components',
+      './app/api'
+    ],
     extensions: [
       '',
       '.js',
