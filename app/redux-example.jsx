@@ -2,14 +2,8 @@ var redux = require('redux');
 
 cl('Starting redux example');
 
-var stateDefault = {
-  name: 'Anonymous',
-  hobbies: [],
-  movies: []
-};
-var nextHobbyId = 1;
-var nextMovieId = 1;
-
+// Name reducer and action generators
+// ----------------------------------
 var nameReducer = (state = 'Anonymous', action) => {
   switch(action.type) {
     case 'CHANGE_NAME':
@@ -19,6 +13,16 @@ var nameReducer = (state = 'Anonymous', action) => {
   }
 };
 
+var changeName = (name) => {
+  return {
+    type: 'CHANGE_NAME',
+    name
+  };
+};
+
+// Hobbies reducer and action generators
+// -------------------------------------
+var nextHobbyId = 1;
 var hobbiesReducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_HOBBY':
@@ -36,6 +40,23 @@ var hobbiesReducer = (state = [], action) => {
   }
 };
 
+var addHobby = (hobby) => {
+  return {
+    type: 'ADD_HOBBY',
+    hobby
+  };
+};
+
+var removeHobby = (id) => {
+  return {
+    type: 'REMOVE_HOBBY',
+    id
+  };
+};
+
+// Movies reducer and action generators
+// ------------------------------------
+var nextMovieId = 1;
 var moviesReducer = (state = [], action) => {
   switch(action.type) {
     case 'ADD_MOVIE':
@@ -54,6 +75,22 @@ var moviesReducer = (state = [], action) => {
   }
 };
 
+var addMovie = (title, genre) => {
+  return {
+    type: 'ADD_MOVIE',
+    title,
+    genre
+  };
+};
+
+var removeMovie = (id) => {
+  return {
+    type: 'REMOVE_MOVIE',
+    id
+  };
+};
+
+// -------------------
 var reducer = redux.combineReducers({
   name: nameReducer,
   hobbies: hobbiesReducer,
@@ -70,47 +107,19 @@ var unsubscribe = store.subscribe(() => {
   document.getElementById('app').innerHTML = state.name;
 });
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Mrow'
-});
+// -------------------
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Eat'
-});
+store.dispatch(changeName('Mrow'));
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Sleep'
-});
+store.dispatch(addHobby('Eat'));
+store.dispatch(addHobby('Sleep'));
+store.dispatch(removeHobby(2));
 
-store.dispatch({
-  type: 'REMOVE_HOBBY',
-  id: 2
-});
+store.dispatch(changeName('Meow'));
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Meow'
-});
-
-store.dispatch({
-  type: 'ADD_MOVIE',
-  title: 'Mad Max',
-  genre: 'Action'
-});
-
-store.dispatch({
-  type: 'ADD_MOVIE',
-  title: 'Care Bears The Movie',
-  genre: 'Horror'
-});
-
-store.dispatch({
-  type: 'REMOVE_MOVIE',
-  id: 1
-});
+store.dispatch(addMovie('Mad Max', 'Action'));
+store.dispatch(addMovie('Care Bears The Movie', 'Horror'));
+store.dispatch(removeMovie(1));
 
 //unsubscribe();
 
